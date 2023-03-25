@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import { usePoemStore } from "../stores/PoemStore";
+import api from "@/services/Api";
 
 export default {
   name: "PoemDetails",
@@ -53,19 +53,6 @@ export default {
     },
   },
   methods: {
-    fetchPoemLines() {
-      if (!this.selectedPoem) {
-        return;
-      }
-      axios
-        .get(`https://poetrydb.org/title/${this.selectedPoem.title}`)
-        .then((response) => {
-          this.poemLines = response.data[0].lines;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     addOrRemoveFavorite(selectedPoem) {
       if (this.isFavorite) {
         this.poemStore.removeFavorite(selectedPoem);
@@ -75,9 +62,11 @@ export default {
     },
   },
   watch: {
-    selectedPoem(newVal, oldVal) {
+    async selectedPoem(newVal, oldVal) {
       if (newVal !== oldVal) {
-        this.fetchPoemLines();
+        console.log("här");
+        this.poemLines = await api.fetchPoemLines(newVal);
+        console.log(this.poemLines);
       }
     },
   },
