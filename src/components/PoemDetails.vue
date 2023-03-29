@@ -64,9 +64,7 @@ export default {
   watch: {
     async selectedPoem(newVal, oldVal) {
       if (newVal !== oldVal) {
-        console.log("här");
         this.poemLines = await api.fetchPoemLines(newVal);
-        console.log(this.poemLines);
       }
     },
   },
